@@ -1,25 +1,27 @@
 #include <Arduino.h>
-#include <ServoLight.h> 
 
-Servo myservo(9);  // create servo object to control a servo 
+int SENSOR_PIN = 0; // center pin of the potentiometer
+int RPWM_Output = 5; // Arduino PWM output pin 5; connect to IBT-2 pin 1 (RPWM)
+int LPWM_Output = 6; // Arduino PWM output pin 6; connect to IBT-2 pin 2 (LPWM)
 
-
-void setup() {
-  pinMode(onboard, OUTPUT);
-}
+void setup()
+{ 
+pinMode(RPWM_Output, OUTPUT); 
+pinMode(LPWM_Output, OUTPUT);
+ }
 
 void loop() {
- { 
-  for(pos = 20; pos < 240; pos += 1)  // goes from 0 degrees to 180 degrees 
-  {                                  // in steps of 1 degree 
-    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-    delay(15);                       // waits 15ms for the servo to reach the position 
-  } 
-  for(pos = 240; pos>=20; pos-=1)     // goes from 180 degrees to 0 degrees 
-  {                                
-    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-    delay(15);                       // waits 15ms for the servo to reach the position 
-  } 
-} 
+    int sensorValue = analogRead(SENSOR_PIN); 
+    //  sensor value is in the range 0 to 1023 
+    //  the lower half of it we use for reverse rotation; the upper half for forward
+
+    rotation if (sensorValue < 512) 
+    { // reverse rotation 
+    int reversePWM = -(sensorValue - 511) / 2; analogWrite(LPWM_Output, 0);
+     analogWrite(RPWM_Output, reversePWM); 
+     } else { // forward rotation 
+     nt forwardPWM = (sensorValue - 512) / 2; analogWrite(LPWM_Output, forwardPWM); 
+     analogWrite(RPWM_Output, 0); }
 
 }
+
